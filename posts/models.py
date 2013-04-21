@@ -4,13 +4,14 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class AbstractPost(models.Model):
-    author = models.ForeignKey(User, editable=False, related_name = "%(app_label)s_%(class)s_posts")
+    owner = models.ForeignKey(User, editable=False, related_name = "%(app_label)s_%(class)s_posts")
     headline = models.CharField(_("Headline"), max_length=255)
     text = models.TextField(_("Text"))
-    creation_date = models.DateTimeField(_("Creation Date"), auto_now_add=True)
+    createddate = models.DateTimeField(_("Created Date"), auto_now_add=True, db_index=True)
+    modifieddate = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-creation_date']
+        ordering = ['-createddate']
         abstract = True
 
     def __unicode__(self):
